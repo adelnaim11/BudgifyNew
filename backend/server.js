@@ -41,5 +41,16 @@ app.use("/api/carousel", carouselRoutes);
 app.use("/api/team",teamRoutes);
 app.use("/api/hero", hero);
 app.get("/", (req, res) => res.send("Backend running!"));
+
+app.get('/api/test', async (req, res) => {
+  try {
+    const data = await yourDbCall();
+    res.json({ success: true, data });
+  } catch (err) {
+    console.error('Route error:', err);  // THIS SHOWS THE REAL REASON
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 const PORT = process.env.Server_PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

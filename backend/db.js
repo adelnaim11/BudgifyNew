@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const db = await mysql.createPool({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
@@ -12,6 +12,11 @@ const db = await mysql.createPool({
   port: process.env.DB_PORT,
 });
 
-console.log("MySQL connected.");
+db.getConnection()
+  .then(() => console.log("MySQL connected."))
+  .catch(err => {
+    console.error("MySQL connection error:", err);
+    process.exit(1); 
+  });
 
 export default db;
