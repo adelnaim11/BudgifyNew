@@ -1,0 +1,9 @@
+import express from "express";
+import { getBudget, setBudget } from "../controllers/budgetController.js";
+
+const router = express.Router();
+
+router.get("/:userId/:monthYear", getBudget);
+router.post("/", setBudget);
+
+export default router;

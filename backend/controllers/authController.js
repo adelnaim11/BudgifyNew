@@ -1,0 +1,94 @@
+
+import db from "../db.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
+
+export const signup = async (req, res) => {
+  const { fullname, email, password } = req.body; // FIXED HERE
+
+  try {
+
+    const [existing] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+    if (existing.length > 0) {
+      return res.status(400).json({ success: false, message: "Email already exists" });
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    const [result] = await db.execute(
+      "INSERT INTO users (full_name, email, password_hash) VALUES (?, ?, ?)",
+      [fullname, email, hashed] // FIXED HERE TOO
+    );
+
+    res.json({ success: true, message: "User created successfully", userId: result.insertId });
+  } catch (err) {
+    console.error("Signup error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: false, 
+    sameSite: "lax",
+  });
+  res.json({ success: true, message: "Logged out successfully" });
+};
+
+
+
+export const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const [rows] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
+    if (rows.length === 0) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    const user = rows[0];
+
+    const valid = await bcrypt.compare(password, user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ success: false, message: "Invalid password" });
+    }
+    
+    if (user.status === "banned") {
+      return res.status(403).json({ 
+        success: false, 
+        message: "Account is banned. Please contact customer support for assistance." 
+      });
+    }
+    
+
+    const token = jwt.sign(
+      { id: user.user_id, full_name: user.full_name, email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 2 * 60 * 60 * 1000, 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: "lax", 
+    });
+
+
+    res.json({
+      success: true,
+      user: {
+        id: user.user_id,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role, 
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
