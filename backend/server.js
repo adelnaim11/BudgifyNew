@@ -41,5 +41,5 @@ app.use("/api/carousel", carouselRoutes);
 app.use("/api/team",teamRoutes);
 app.use("/api/hero", hero);
 app.get("/", (req, res) => res.send("Backend running!"));
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.Server_PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
