@@ -15,7 +15,6 @@ import carouselRoutes from "./routes/carouselRoutes.js";
 import aboutRoutes from "./routes/aboutRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import hero from "./routes/heroRoutes.js";
-import db from "../db.js";
 
 dotenv.config();
 const app = express();
