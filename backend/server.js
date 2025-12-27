@@ -15,6 +15,7 @@ import carouselRoutes from "./routes/carouselRoutes.js";
 import aboutRoutes from "./routes/aboutRoutes.js";
 import teamRoutes from "./routes/teamRoutes.js";
 import hero from "./routes/heroRoutes.js";
+import db from "../db.js";
 
 dotenv.config();
 const app = express();
@@ -44,8 +45,9 @@ app.get("/", (req, res) => res.send("Backend running!"));
 
 app.get('/api/test', async (req, res) => {
   try {
-    const data = await yourDbCall();
-    res.json({ success: true, data });
+    const [rows] = await db.query("SELECT * FROM stats");
+    if (!rows.length) return res.status(404).json({ message: "No home content found" });
+    res.json({ success: true, rows });
   } catch (err) {
     console.error('Route error:', err);  // THIS SHOWS THE REAL REASON
     res.status(500).json({ success: false, message: err.message });
