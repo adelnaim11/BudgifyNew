@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ed6d8e49.css",
+    "main.js": "/static/js/main.bbc1861b.js",
+    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
+    "static/media/Dashboard-waves.svg": "/static/media/Dashboard-waves.85d24cc365f342cf83f1.svg",
+    "static/media/Button3.svg": "/static/media/Button3.c1bf69ca7b43ea9bd694.svg",
+    "static/media/Button2.svg": "/static/media/Button2.397e9ceaf68ccf8e3a1c.svg",
+    "static/media/Button1.svg": "/static/media/Button1.d0ba6b6e9cff6cc0e63b.svg",
+    "static/media/Button4.svg": "/static/media/Button4.abb433eecd1513661661.svg",
+    "static/media/Admin-edit.svg": "/static/media/Admin-edit.4577beaded5a6a370448.svg",
+    "static/media/Admin.svg": "/static/media/Admin.c176dbb62a14af59df16.svg",
+    "static/media/bootstrap-icons.woff?": "/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
+    "static/media/bootstrap-icons.woff2?": "/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
+    "static/media/TrackExpense.webp": "/static/media/TrackExpense.1aec8ddf252d6395366c.webp",
+    "static/media/Login.svg": "/static/media/Login.9d78c91bd0f1a019eb2f.svg",
+    "static/media/team.png": "/static/media/team.8b4cae0c80c4e7b8f539.png",
+    "static/media/Grid.svg": "/static/media/Grid.2cba8c0c7aec1dbfd3ae.svg",
+    "index.html": "/index.html",
+    "main.ed6d8e49.css.map": "/static/css/main.ed6d8e49.css.map",
+    "main.bbc1861b.js.map": "/static/js/main.bbc1861b.js.map",
+    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ed6d8e49.css",
+    "static/js/main.bbc1861b.js"
+  ]
+}
