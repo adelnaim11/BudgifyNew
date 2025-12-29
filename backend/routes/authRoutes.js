@@ -32,7 +32,6 @@ router.get("/me", verifyToken, (req, res) => {
   });
 });
 
-// 🔒 Middleware to verify JWT from cookies
 function verifyToken(req, res, next) {
   const token = req.cookies.token;
   if (!token) {
@@ -41,7 +40,7 @@ function verifyToken(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // decoded contains: { id, full_name, email }
+    req.user = decoded;
     next();
   } catch (err) {
     console.error("JWT verification failed:", err);
@@ -49,12 +48,10 @@ function verifyToken(req, res, next) {
   }
 }
 
-// ✅ Existing routes
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 
-// ✅ New route to get current user
 
 
 
