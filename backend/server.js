@@ -48,7 +48,7 @@ app.get('/api/test', async (req, res) => {
     if (!rows.length) return res.status(404).json({ message: "No home content found" });
     res.json({ success: true, rows });
   } catch (err) {
-    console.error('Route error:', err);  // THIS SHOWS THE REAL REASON
+    console.error('Route error:', err); 
     res.status(500).json({ success: false, message: err.message });
   }
 });

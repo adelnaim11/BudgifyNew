@@ -29,11 +29,6 @@ export const signup = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: false, 
-    sameSite: "lax",
-  });
   res.json({ success: true, message: "Logged out successfully" });
 };
 
@@ -43,8 +38,12 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
-    if (rows.length === 0) {
+    const [rows] = await db.execute(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (!rows.length) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
@@ -54,37 +53,33 @@ export const login = async (req, res) => {
     if (!valid) {
       return res.status(401).json({ success: false, message: "Invalid password" });
     }
-    
+
     if (user.status === "banned") {
-      return res.status(403).json({ 
-        success: false, 
-        message: "Account is banned. Please contact customer support for assistance." 
+      return res.status(403).json({
+        success: false,
+        message: "Account is banned",
       });
     }
-    
 
     const token = jwt.sign(
-      { id: user.user_id, full_name: user.full_name, email: user.email, role: user.role },
+      {
+        id: user.user_id,
+        full_name: user.full_name,
+        email: user.email,
+        role: user.role,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "2h" }
     );
 
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      maxAge: 2 * 60 * 60 * 1000, 
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: "lax", 
-    });
-
-
     res.json({
       success: true,
+      token, 
       user: {
         id: user.user_id,
         full_name: user.full_name,
         email: user.email,
-        role: user.role, 
+        role: user.role,
       },
     });
   } catch (err) {
