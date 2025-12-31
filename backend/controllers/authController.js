@@ -5,23 +5,45 @@ import jwt from "jsonwebtoken";
 
 
 export const signup = async (req, res) => {
-  const { fullname, email, password } = req.body; // FIXED HERE
+  const { fullname, username, email, password } = req.body;
+
+  if (!fullname || !username || !email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required"
+    });
+  }
 
   try {
-
-    const [existing] = await db.execute("SELECT * FROM users WHERE email = ?", [email]);
-    if (existing.length > 0) {
+    const [emailExists] = await db.execute(
+      "SELECT user_id FROM users WHERE email = ?",
+      [email]
+    );
+    if (emailExists.length > 0) {
       return res.status(400).json({ success: false, message: "Email already exists" });
+    }
+    const [usernameExists] = await db.execute(
+      "SELECT user_id FROM users WHERE username = ?",
+      [username]
+    );
+    if (usernameExists.length > 0) {
+      return res.status(400).json({ success: false, message: "Username already exists" });
     }
 
     const hashed = await bcrypt.hash(password, 10);
 
     const [result] = await db.execute(
-      "INSERT INTO users (full_name, email, password_hash) VALUES (?, ?, ?)",
-      [fullname, email, hashed] // FIXED HERE TOO
+      `INSERT INTO users (full_name, username, email, password_hash)
+       VALUES (?, ?, ?, ?)`,
+      [fullname, username, email, hashed]
     );
 
-    res.json({ success: true, message: "User created successfully", userId: result.insertId });
+    res.status(201).json({
+      success: true,
+      message: "User created successfully",
+      userId: result.insertId
+    });
+
   } catch (err) {
     console.error("Signup error:", err);
     res.status(500).json({ success: false, message: "Server error" });

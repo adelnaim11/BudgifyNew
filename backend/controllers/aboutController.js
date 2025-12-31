@@ -1,6 +1,5 @@
 import db from "../db.js";
 
-// GET about content
 export const getAbout = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM about_page LIMIT 1");

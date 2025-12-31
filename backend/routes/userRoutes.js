@@ -1,4 +1,5 @@
 import express from "express";
+import { isAdmin, verifyToken } from "../middleware/verifyToken.js";
 import {
   getAllUsers,
   updateUser,
@@ -8,9 +9,9 @@ import {
 
 const router = express.Router();
 
-router.get("/", getAllUsers);          // GET all users
-router.put("/:id", updateUser);        // Edit username or password
-router.delete("/:id", deleteUser);     // Ban/Delete user
-router.put("/:id/ban", toggleBanUser);
+router.get("/",verifyToken,isAdmin, getAllUsers);       
+router.put("/:id", verifyToken, isAdmin, updateUser);       
+router.delete("/:id", verifyToken, isAdmin, deleteUser);     
+router.put("/:id/ban", verifyToken, isAdmin, toggleBanUser);
 
 export default router;

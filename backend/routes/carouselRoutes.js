@@ -1,4 +1,6 @@
 import express from "express";
+import { upload } from "../middleware/upload.js";
+import { verifyToken, isAdmin } from "../middleware/verifyToken.js";
 import {
   getCarousel,
   getSlide,
@@ -9,11 +11,10 @@ import {
 
 const router = express.Router();
 
-// CRUD routes
+router.post("/", upload.single("image"), verifyToken, isAdmin, createSlide);
+router.put("/:id", upload.single("image"), verifyToken, isAdmin, updateSlide);
 router.get("/", getCarousel);
 router.get("/:id", getSlide);
-router.post("/", createSlide);
-router.put("/:id", updateSlide);
-router.delete("/:id", deleteSlide);
+router.delete("/:id", verifyToken, isAdmin, deleteSlide);
 
 export default router;

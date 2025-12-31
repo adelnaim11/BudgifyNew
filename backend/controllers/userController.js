@@ -1,7 +1,7 @@
 import db from "../db.js";
 import bcrypt from "bcryptjs";
 
-// 🧾 Get all users
+
 export const getAllUsers = async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -14,7 +14,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-// 🔍 Get single user by ID
+
 export const getUserById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -30,7 +30,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-// ✏️ Update user (name, username, email, password, or role)
+
 export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { full_name, username, email, password, role } = req.body;
@@ -56,7 +56,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
-// 🗑️ Delete user (admin or cleanup)
+
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
@@ -72,7 +72,7 @@ export const deleteUser = async (req, res) => {
 };
 
 
-// Toggle ban/unban user
+
 export const toggleBanUser = async (req, res) => {
   const { id } = req.params;
 

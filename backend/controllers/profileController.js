@@ -1,7 +1,6 @@
 import db from "../db.js";
 import bcrypt from "bcryptjs";
 
-// Get current user info
 export const getProfile = async (req, res) => {
   try {
     const [rows] = await db.execute(
@@ -17,7 +16,6 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// Update profile info: full_name, username
 export const updateProfile = async (req, res) => {
   const { full_name, username } = req.body;
   try {
@@ -33,7 +31,6 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-// Change password
 export const changePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
   try {

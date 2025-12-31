@@ -1,6 +1,6 @@
 import db from "../db.js";
 
-// Get all slides
+
 export const getCarousel = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM carousel ORDER BY id DESC");
@@ -11,7 +11,7 @@ export const getCarousel = async (req, res) => {
   }
 };
 
-// Get a single slide
+
 export const getSlide = async (req, res) => {
   const { id } = req.params;
   try {
@@ -26,9 +26,11 @@ export const getSlide = async (req, res) => {
   }
 };
 
-// Create new slide
+
 export const createSlide = async (req, res) => {
-  const { text, image } = req.body;
+  const { text } = req.body;
+  const image = req.file ? `/uploads/${req.file.filename}` : null;
+
   if (!text || !image)
     return res.status(400).json({ success: false, message: "Missing fields" });
 
@@ -37,37 +39,39 @@ export const createSlide = async (req, res) => {
       "INSERT INTO carousel (text, image) VALUES (?, ?)",
       [text, image]
     );
+
     res.json({
       success: true,
-      message: "Slide created",
       slide: { id: result.insertId, text, image },
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false });
   }
 };
 
-// Update slide
+
+
 export const updateSlide = async (req, res) => {
   const { id } = req.params;
-  const { text, image } = req.body;
+  const { text } = req.body;
+  const image = req.file
+    ? `/uploads/${req.file.filename}`
+    : req.body.image;
+
   try {
-    const [result] = await db.query(
+    await db.query(
       "UPDATE carousel SET text = ?, image = ? WHERE id = ?",
       [text, image, id]
     );
-    if (result.affectedRows === 0)
-      return res.status(404).json({ success: false, message: "Slide not found" });
 
-    res.json({ success: true, message: "Slide updated" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.json({ success: true });
+  } catch {
+    res.status(500).json({ success: false });
   }
 };
 
-// Delete slide
+
+
 export const deleteSlide = async (req, res) => {
   const { id } = req.params;
   try {

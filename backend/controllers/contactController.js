@@ -45,7 +45,7 @@ export const getContact = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM contact_info LIMIT 1");
     if (rows.length === 0) return res.status(404).json({ message: "No contact found" });
-    res.json(rows[0]); // Must include `id`
+    res.json(rows[0]); 
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch contact" });
